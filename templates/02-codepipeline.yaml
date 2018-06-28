@@ -3,17 +3,22 @@ Description: code delivery for each services
 Parameters:
   GitHubApplicationRepo:
     Type: String
+    Description: Application code lives here
   GitHubTemplatesRepo:
       Type: String
+      Description: Templates / Scripting / common infrastructure related code lives here
 
   GitHubBranch:
     Type: String
+    Description: Branch to pull the code from
 
   GitHubToken:
     Type: String
+    Description: Github User Token
 
   GitHubUser:
     Type: String
+    Description: User or organization who owns the repositories
 
   ServiceName:
         Description: Name of the service
