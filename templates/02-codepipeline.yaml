@@ -1,8 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: code delivery for each services
 Parameters:
-  GitHubRepo:
+  GitHubApplicationRepo:
     Type: String
+  GitHubTemplatesRepo:
+      Type: String
 
   GitHubBranch:
     Type: String
@@ -177,11 +179,25 @@ Resources:
                     Provider: GitHub
                   Configuration:
                     Owner: !Ref GitHubUser
-                    Repo: !Ref GitHubRepo
+                    Repo: !Ref GitHubApplicationRepo
                     Branch: !Ref GitHubBranch
                     OAuthToken: !Ref GitHubToken
                   OutputArtifacts:
                     - Name: App
+                  RunOrder: 1
+                - Name: Scripts
+                  ActionTypeId:
+                    Category: Source
+                    Owner: ThirdParty
+                    Version: 1
+                    Provider: GitHub
+                  Configuration:
+                    Owner: !Ref GitHubUser
+                    Repo: !Ref GitHubTemplatesRepo
+                    Branch: !Ref GitHubBranch
+                    OAuthToken: !Ref GitHubToken
+                  OutputArtifacts:
+                    - Name: Scripts
                   RunOrder: 1
             - Name: Build
               Actions:
@@ -211,7 +227,7 @@ Resources:
                     ActionMode: CREATE_UPDATE
                     StackName: !Sub dev-${ServiceName}-execution-environment
                     Capabilities: CAPABILITY_NAMED_IAM
-                    TemplatePath: App::templates/03-events-per-service.yaml
+                    TemplatePath: Scripts::templates/03-events-per-service.yaml
                     RoleArn: !GetAtt CloudFormationExecutionRole.Arn
                     ParameterOverrides: !Sub |
                       {
@@ -221,7 +237,7 @@ Resources:
 
                       }
                   InputArtifacts:
-                    - Name: App
+                    - Name: Scripts
                     - Name: BuildOutput
                   RunOrder: 1
             - Name: Deploy-To-Prod
@@ -237,7 +253,7 @@ Resources:
                                 ActionMode: CREATE_UPDATE
                                 StackName: !Sub prod-${ServiceName}-execution-environment
                                 Capabilities: CAPABILITY_NAMED_IAM
-                                TemplatePath: App::templates/03-events-per-service.yaml
+                                TemplatePath: Scripts::templates/03-events-per-service.yaml
                                 RoleArn: !GetAtt CloudFormationExecutionRole.Arn
                                 ParameterOverrides: !Sub |
                                   {
@@ -247,6 +263,6 @@ Resources:
 
                                   }
                               InputArtifacts:
-                                - Name: App
+                                - Name: Scripts
                                 - Name: BuildOutput
                               RunOrder: 1
