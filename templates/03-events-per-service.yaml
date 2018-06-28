@@ -74,8 +74,6 @@ Resources:
                     Action:
                       - ses:*
 
-    #TODO : YOU MAY NEED TO DEFINE THE TOPIC POLICY, WHICH I DIDNT SEE IN THE MAIN TEMPLATE
-
     # START : Currently Cloudformation AWS Events do not support triggering Batch as target. Its only supported via cli or console
     TriggerBatchLambda:
       Type: AWS::Lambda::Function
