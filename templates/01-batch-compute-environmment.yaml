@@ -75,10 +75,6 @@ Resources:
 #                  Effect: Allow
 #                  Action:
 #                    - batch:SubmitJob
-    DefaultJobBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: !Sub ${AWS::AccountId}-${Environment}-job
     CodePipelineArtifactBucket:
       Type: AWS::S3::Bucket
       Condition: CreateBucketForCodePipeline

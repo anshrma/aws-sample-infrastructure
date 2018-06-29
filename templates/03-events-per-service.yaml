@@ -44,7 +44,7 @@ Resources:
           Image: !Ref ImageSha
           Environment:
             - Value: S3_BUCKET_NAME
-              Name: !Sub ${AWS::AccountId}-${Environment}-job
+              Name: !Sub ${AWS::AccountId}-${Environment}-${ServiceName}-job
         JobDefinitionName: !Sub ${Environment}-${ServiceName}
         RetryStrategy:
           Attempts: 3
@@ -65,7 +65,7 @@ Resources:
                 Version: 2012-10-17
                 Statement:
                 # TODO : FOR BETTER SEGGREGATION, YOU SHOULD REFINE THIS BASED ON FOLDER STRUCTURE. EACH SERVICE GETS ITS OWN FOLDER
-                  - Resource: !Sub arn:aws:s3:::${AWS::AccountId}-${Environment}-job/*
+                  - Resource: !Sub arn:aws:s3:::${AWS::AccountId}-${Environment}-${ServiceName}-job/*
                     Effect: Allow
                     Action:
                       - s3:*

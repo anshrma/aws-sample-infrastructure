@@ -34,6 +34,12 @@ Parameters:
       Description: >
         Schedule to run the service in prod environment.Example : cron(0/2 * * * ? *)
 Resources:
+
+    DefaultJobBucket:
+          Type: AWS::S3::Bucket
+          Properties:
+            BucketName: !Sub ${AWS::AccountId}-${Environment}-${ServiceName}-job
+
     CodePipelineServiceRole:
       Type: AWS::IAM::Role
       Properties:
