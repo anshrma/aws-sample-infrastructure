@@ -96,6 +96,7 @@ Resources:
                     - ecr:*
                     - lambda:*
                     - events:*
+                    - s3:*
     CodeBuildServiceRole:
       Type: AWS::IAM::Role
       Properties:
