@@ -17,6 +17,9 @@ Parameters:
       MinLength: 1
       MaxLength: 255
       AllowedPattern: "^[a-zA-Z][-a-zA-Z0-9]*$"
+  Email:
+    Description: Email ID to which the job failure notifications will be sent to
+    Type: String
 
 Conditions:
   CreateBucketForCodePipeline: !Equals [!Ref Environment, dev]
@@ -107,6 +110,47 @@ Resources:
                     - batch:DescribeJobs
                     - batch:ListJobs
                     - batch:SubmitJob
+    Notification:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: String
+        Subscription:
+          -
+            Endpoint: !Ref Email
+            Protocol: email
+    SNSPolicyForEvents:
+      Type: AWS::SNS::TopicPolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: allow-events
+              Effect: Allow
+              Principal:
+                Service :
+                - events.amazonaws.com
+              Action: sns:Publish
+              Resource: !Ref Notification
+        Topics:
+          - !Ref Notification
+    FailedJobNotificationRule:
+      Type: AWS::Events::Rule
+      Properties:
+        Description: !Sub ${Environment}-job-failure-notification
+        EventPattern:
+          source:
+            -aws.batch
+          detail-type:
+            - Batch Job State Change
+          detail:
+            status:
+              - FAILED
+        Name: !Sub ${Environment}-job-failure-notification
+        State: ENABLED
+        Targets:
+          -
+            Arn: !Ref Notification
+            Id: FailedJobNotification
 Outputs:
 #  CloudWatchEventsSubmitBatchJobRoleArn:
 #    Value: !GetAtt CloudWatchEventsSubmitBatchJobRole.Arn
