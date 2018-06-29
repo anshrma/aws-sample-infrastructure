@@ -139,9 +139,9 @@ Resources:
         Description: !Sub ${Environment}-job-failure-notification
         EventPattern:
           source:
-            -aws.batch
+          - aws.batch
           detail-type:
-            - Batch Job State Change
+          - Batch Job State Change
           detail:
             status:
               - FAILED
