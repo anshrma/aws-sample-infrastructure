@@ -17,6 +17,10 @@ Parameters:
     Type: String
     Description: image sha for the service
 
+  CronExpression:
+    Type: String
+    Description: Schedule to run the service.
+
 Resources:
     BatchJobQueue:
       Type: AWS::Batch::JobQueue
@@ -106,7 +110,7 @@ Resources:
         Description: !Sub ${Environment}-${ServiceName}
         Name: !Sub ${Environment}-${ServiceName}
         #TODO : I dont thinkl this cron exprssion is correct. It invokes every 2 minutes
-        ScheduleExpression: cron(0/2 * * * ? *)
+        ScheduleExpression: !Ref CronExpression
         State: ENABLED
         Targets:
           - Arn: !GetAtt TriggerBatchLambda.Arn

@@ -23,6 +23,16 @@ Parameters:
   ServiceName:
         Description: Name of the service
         Type: String
+
+  CronExpressionDevEnvironment:
+      Type: String
+      Description: >
+        Schedule to run the service in dev environment.Example : cron(0/2 * * * ? *)
+
+  CronExpressionProdEnvironment:
+      Type: String
+      Description: >
+        Schedule to run the service in prod environment.Example : cron(0/2 * * * ? *)
 Resources:
     CodePipelineServiceRole:
       Type: AWS::IAM::Role
@@ -238,7 +248,8 @@ Resources:
                       {
                           "Environment": "dev",
                           "ServiceName": "${ServiceName}",
-                          "ImageSha" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] }
+                          "ImageSha" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] },
+                          "CronExpression: "${CronExpressionDevEnvironment}"
 
                       }
                   InputArtifacts:
@@ -273,7 +284,8 @@ Resources:
                       {
                                       "Environment": "prod",
                                       "ServiceName": "${ServiceName}",
-                                      "ImageSha" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] }
+                                      "ImageSha" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] },
+                                      "CronExpression : "${CronExpressionProdEnvironment}"
 
                       }
                   InputArtifacts:
