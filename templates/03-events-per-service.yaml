@@ -22,6 +22,11 @@ Parameters:
     Description: Schedule to run the service.
 
 Resources:
+
+    DefaultJobBucket:
+              Type: AWS::S3::Bucket
+              Properties:
+                BucketName: !Sub ${AWS::AccountId}-${Environment}-${ServiceName}-job
     BatchJobQueue:
       Type: AWS::Batch::JobQueue
       Properties:
