@@ -64,7 +64,6 @@ Resources:
               PolicyDocument:
                 Version: 2012-10-17
                 Statement:
-                # TODO : FOR BETTER SEGGREGATION, YOU SHOULD REFINE THIS BASED ON FOLDER STRUCTURE. EACH SERVICE GETS ITS OWN FOLDER
                   - Resource: !Sub arn:aws:s3:::${AWS::AccountId}-${Environment}-${ServiceName}-job/*
                     Effect: Allow
                     Action:
@@ -109,7 +108,6 @@ Resources:
       Properties:
         Description: !Sub ${Environment}-${ServiceName}
         Name: !Sub ${Environment}-${ServiceName}
-        #TODO : I dont thinkl this cron exprssion is correct. It invokes every 2 minutes
         ScheduleExpression: !Ref CronExpression
         State: ENABLED
         Targets:

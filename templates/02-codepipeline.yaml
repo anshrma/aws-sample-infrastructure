@@ -255,7 +255,7 @@ Resources:
                           "Environment": "dev",
                           "ServiceName": "${ServiceName}",
                           "ImageSha" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] },
-                          "CronExpression: "${CronExpressionDevEnvironment}"
+                          "CronExpression" : "${CronExpressionDevEnvironment}"
 
                       }
                   InputArtifacts:
@@ -291,7 +291,7 @@ Resources:
                                       "Environment": "prod",
                                       "ServiceName": "${ServiceName}",
                                       "ImageSha" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] },
-                                      "CronExpression : "${CronExpressionProdEnvironment}"
+                                      "CronExpression" : "${CronExpressionProdEnvironment}"
 
                       }
                   InputArtifacts:
