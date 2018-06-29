@@ -105,6 +105,7 @@ Resources:
       Properties:
         Description: !Sub ${Environment}-${ServiceName}
         Name: !Sub ${Environment}-${ServiceName}
+        #TODO : I dont thinkl this cron exprssion is correct. It invokes every 2 minutes
         ScheduleExpression: cron(0/2 * * * ? *)
         State: ENABLED
         Targets:
