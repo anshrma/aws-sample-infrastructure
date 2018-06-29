@@ -247,27 +247,36 @@ Resources:
                   RunOrder: 1
             - Name: Deploy-To-Prod
               Actions:
-                            - Name: Deploy
-                              ActionTypeId:
-                                Category: Deploy
-                                Owner: AWS
-                                Version: 1
-                                Provider: CloudFormation
-                              Configuration:
-                                ChangeSetName: Deploy
-                                ActionMode: CREATE_UPDATE
-                                StackName: !Sub prod-${ServiceName}-execution-environment
-                                Capabilities: CAPABILITY_NAMED_IAM
-                                TemplatePath: Scripts::templates/03-events-per-service.yaml
-                                RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                                ParameterOverrides: !Sub |
-                                  {
+                - Name: Approval
+                  ActionTypeId:
+                    Category: Approval
+                    Owner: AWS
+                    Version: 1
+                    Provider: Manual
+                  Configuration:
+                    CustomData: "Continue with production deployment ?"
+                  RunOrder: 1
+                - Name: Deploy
+                  ActionTypeId:
+                    Category: Deploy
+                    Owner: AWS
+                    Version: 1
+                    Provider: CloudFormation
+                  Configuration:
+                    ChangeSetName: Deploy
+                    ActionMode: CREATE_UPDATE
+                    StackName: !Sub prod-${ServiceName}-execution-environment
+                    Capabilities: CAPABILITY_NAMED_IAM
+                    TemplatePath: Scripts::templates/03-events-per-service.yaml
+                    RoleArn: !GetAtt CloudFormationExecutionRole.Arn
+                    ParameterOverrides: !Sub |
+                      {
                                       "Environment": "prod",
                                       "ServiceName": "${ServiceName}",
                                       "ImageSha" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] }
 
-                                  }
-                              InputArtifacts:
-                                - Name: Scripts
-                                - Name: BuildOutput
-                              RunOrder: 1
+                      }
+                  InputArtifacts:
+                    - Name: Scripts
+                    - Name: BuildOutput
+                  RunOrder: 2

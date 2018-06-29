@@ -29,8 +29,7 @@ Resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: Batch EC2 Security Group
-        VpcId:
-          Fn::ImportValue: !Sub ${NetworkStackName}-VpcID
+        VpcId: vpc-ec394d97
         Tags:
         - Key: Name
           Value: !Sub ${Environment}-batchinstance
@@ -53,8 +52,8 @@ Resources:
           InstanceTypes:
             - optimal
           Subnets:
-            - Fn::ImportValue: !Sub ${NetworkStackName}-PrivateSubnet1ID
-            - Fn::ImportValue: !Sub ${NetworkStackName}-PrivateSubnet2ID
+            - subnet-c05a64ff
+            - subnet-0c31dc6b
 #    CloudWatchEventsSubmitBatchJobRole:
 #      Type: AWS::IAM::Role
 #      Properties:
